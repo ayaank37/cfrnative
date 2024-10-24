@@ -6,25 +6,19 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
-import { BorderlessButton } from 'react-native-gesture-handler';
+import { useContext } from 'react';
+import { EnergyContext } from '../context/EnergyContext'; // Import the context correctly
 
 export default function TabTwoScreen() {
-  // State to store peak, off-peak, and total usage for each month
-  const [energyUsage, setEnergyUsage] = useState(
-    Array(12).fill({
-      homeUsage: '',
-      driveUsage: '',
-      trashUsage: ''
-    })
-  );
+  // Access energyUsage and setEnergyUsage from context
+  const { energyUsage, setEnergyUsage } = useContext(EnergyContext);
 
   // Function to update the energy usage for a specific month and type
   const handleInputChange = (text, index, type) => {
     const updatedUsage = [...energyUsage];
     updatedUsage[index] = {
       ...updatedUsage[index],
-      [type]: text
+      [type]: text,
     };
     setEnergyUsage(updatedUsage);
   };
@@ -41,31 +35,31 @@ export default function TabTwoScreen() {
         {months.map((month, index) => (
           <View key={index} style={styles.inputContainer}>
             <Text style={styles.label}>{month} Energy Usage</Text>
-            
+
             <Text style={styles.subLabel}>Home Energy Usage (kWh)</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => handleInputChange(text, index, 'peakUsage')}
-              value={energyUsage[index].peakUsage}
-              placeholder={`Enter peak usage for ${month}`}
+              onChangeText={(text) => handleInputChange(text, index, 'homeUsage')}
+              value={energyUsage[index].homeUsage}
+              placeholder={`Enter home usage for ${month}`}
               keyboardType="numeric"
             />
 
             <Text style={styles.subLabel}>Total Driving (mi)</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => handleInputChange(text, index, 'offPeakUsage')}
-              value={energyUsage[index].offPeakUsage}
-              placeholder={`Enter off-peak usage for ${month}`}
+              onChangeText={(text) => handleInputChange(text, index, 'driveUsage')}
+              value={energyUsage[index].driveUsage}
+              placeholder={`Enter driving usage for ${month}`}
               keyboardType="numeric"
             />
 
             <Text style={styles.subLabel}>Total Trash (kg)</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => handleInputChange(text, index, 'totalUsage')}
-              value={energyUsage[index].totalUsage}
-              placeholder={`Enter total usage for ${month}`}
+              onChangeText={(text) => handleInputChange(text, index, 'trashUsage')}
+              value={energyUsage[index].trashUsage}
+              placeholder={`Enter trash usage for ${month}`}
               keyboardType="numeric"
             />
           </View>
@@ -77,7 +71,7 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1, // Ensure SafeAreaView takes the full screen height
+    flex: 1,
     backgroundColor: '#fff',
   },
   container: {
@@ -86,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    marginBottom: 24, // Adds more spacing between each month input section
+    marginBottom: 24,
   },
   label: {
     fontSize: 18,
